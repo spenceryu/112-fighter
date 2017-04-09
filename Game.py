@@ -55,6 +55,10 @@ class PygameGame(object):
             fighter.update(self.isKeyPressed, self.width, self.height, self.attacks, other, dt)
         for i in range(len(self.attacks)):
             self.attacks[i].update(dt)
+        if(pygame.sprite.groupcollide(self.fighterGroup0, self.attackGroup1, False, True)):
+            self.HealthBars[0].health -= 10
+        if(pygame.sprite.groupcollide(self.fighterGroup1, self.attackGroup0, False, True)):
+            self.HealthBars[1].health -= 10
 
 
     def redrawAll(self, screen):
@@ -66,7 +70,8 @@ class PygameGame(object):
         for group in self.attacks:
             group.draw(screen)
 
-
+    def GameOverScreen():
+        pass
 
     def isKeyPressed(self, key):
         ''' return whether a specific key is being held '''
@@ -78,6 +83,7 @@ class PygameGame(object):
         self.fps = fps
         self.title = title
         self.bgColor = (255, 255, 255)
+        self.gameOver = False
         pygame.init()
 
     def run(self):
