@@ -4,9 +4,9 @@ import pygame, random
 def moveAIFighter(player, other):
     # return a string for a piece of movement
     options = ['moveLeft', 'moveRight']
-    aggroOptions = ['moveLeft', 'moveRight']
-    increasedLeft = ['moveLeft'] * 5
-    increasedRight = ['moveRight'] * 5
+    aggroOptions = ['moveLeft', 'moveRight'] * 3
+    increasedLeft = ['moveLeft'] * 3
+    increasedRight = ['moveRight'] * 3
     # the AI is more likely to go in the direction it is facing
     if player.direction == 1:
         options += increasedRight
