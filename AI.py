@@ -5,8 +5,9 @@ def moveAIFighter(player, other):
     # return a string for a piece of movement
     options = ['moveLeft', 'moveRight']
     aggroOptions = ['moveLeft', 'moveRight'] * 3
-    increasedLeft = ['moveLeft'] * 3
-    increasedRight = ['moveRight'] * 3
+    aggression = 3 # you can change this to make the AI track you harder
+    increasedLeft = ['moveLeft'] * aggression
+    increasedRight = ['moveRight'] * aggression
     # the AI is more likely to go in the direction it is facing
     if player.direction == 1:
         options += increasedRight
