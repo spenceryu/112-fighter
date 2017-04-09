@@ -68,10 +68,10 @@ class PygameGame(object):
             self.HealthBars[1].health -= 10
         if(self.HealthBars[0].health <= 0):
             self.gameOver = True
-            self.winner = "Player 0"
+            self.winner = "Player 1"
         if(self.HealthBars[1].health <= 0):
             self.gameOver = True
-            self.winner = "Player 1"
+            self.winner = "Player 0"
 
 
     def redrawAll(self, screen):
