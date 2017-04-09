@@ -21,8 +21,9 @@ from Background import *
 class PygameGame(object):
 
     def init(self):
-        self.fighterGroup = pygame.sprite.Group(Fighter(self.width//2,self.height//2,0),
-                                                Fighter(self.width//2,self.height//2,1))
+        self.fighterGroup0 = pygame.sprite.Group(Fighter(self.width//2,self.height//2,0,1))
+        self.fighterGroup1 = pygame.sprite.Group(Fighter(self.width//2,self.height//2,1,-1))
+        self.fighters = [self.fighterGroup0, self.fighterGroup1]
         self.HealthBars = [HealthBar(0), HealthBar(1)]
         self.attackGroup0 = pygame.sprite.Group()
         self.attackGroup1 = pygame.sprite.Group()
@@ -49,14 +50,17 @@ class PygameGame(object):
         pass
 
     def timerFired(self, dt):
-        self.fighterGroup.update(self.isKeyPressed, self.width, self.height, self.attacks, dt)
-        for group in self.attacks:
-            group.update(dt)
+        for (i, fighter) in enumerate(self.fighters):
+            other = self.fighters[(i+1)%2].sprites()[0]
+            fighter.update(self.isKeyPressed, self.width, self.height, self.attacks, other, dt)
+        for i in range(len(self.attacks)):
+            self.attacks[i].update(dt)
 
 
     def redrawAll(self, screen):
         self.Background.draw(screen)
-        self.fighterGroup.draw(screen)
+        self.fighterGroup0.draw(screen)
+        self.fighterGroup1.draw(screen)
         for HealthBar in self.HealthBars:
             HealthBar.drawHealth(screen)
         for group in self.attacks:
@@ -68,7 +72,7 @@ class PygameGame(object):
         ''' return whether a specific key is being held '''
         return self._keys.get(key, False)
 
-    def __init__(self, width=600, height=400, fps=50, title="112 Pygame Game"):
+    def __init__(self, width=600, height=400, fps=50, title="112 Fighter Game"):
         self.width = width
         self.height = height
         self.fps = fps
