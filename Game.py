@@ -21,14 +21,18 @@ from Background import *
 class PygameGame(object):
 
     def init(self):
-        self.fighterGroup0 = pygame.sprite.Group(Fighter(self.width//2,self.height//2,0,1))
-        self.fighterGroup1 = pygame.sprite.Group(Fighter(self.width//2,self.height//2,1,-1))
+        self.fighterGroup0 = pygame.sprite.Group(Fighter(self.width//4,self.height,0,1))
+        self.fighterGroup1 = pygame.sprite.Group(Fighter(3*self.width//4,self.height,1,-1))
         self.fighters = [self.fighterGroup0, self.fighterGroup1]
         self.HealthBars = [HealthBar(0), HealthBar(1)]
         self.attackGroup0 = pygame.sprite.Group()
         self.attackGroup1 = pygame.sprite.Group()
         self.attacks = [self.attackGroup0, self.attackGroup1]
         self.Background = pygame.sprite.Group(Background())
+        #Text Stuff
+        self.gameOver = False
+        self.gameOverFont = pygame.font.Font(pygame.font.get_default_font(), 48)
+        self.instructFont = pygame.font.Font(pygame.font.get_default_font(), 24)
 
     def mousePressed(self, x, y):
         pass
@@ -45,6 +49,9 @@ class PygameGame(object):
     def keyPressed(self, keyCode, modifier):
         if(keyCode == pygame.K_t):
             self.HealthBars[0].health -= 10
+        if(keyCode == pygame.K_r and self.gameOver):
+            self.init()
+
 
     def keyReleased(self, keyCode, modifier):
         pass
@@ -59,19 +66,39 @@ class PygameGame(object):
             self.HealthBars[0].health -= 10
         if(pygame.sprite.groupcollide(self.fighterGroup1, self.attackGroup0, False, True)):
             self.HealthBars[1].health -= 10
+        if(self.HealthBars[0].health <= 0):
+            self.gameOver = True
+            self.winner = "Player 0"
+        if(self.HealthBars[1].health <= 0):
+            self.gameOver = True
+            self.winner = "Player 1"
 
 
     def redrawAll(self, screen):
         self.Background.draw(screen)
-        self.fighterGroup0.draw(screen)
-        self.fighterGroup1.draw(screen)
-        for HealthBar in self.HealthBars:
-            HealthBar.drawHealth(screen)
-        for group in self.attacks:
-            group.draw(screen)
+        if(self.gameOver):
+            self.GameOverScreen(screen)
+        else:
+            self.fighterGroup0.draw(screen)
+            self.fighterGroup1.draw(screen)
+            for HealthBar in self.HealthBars:
+                HealthBar.drawHealth(screen)
+            for group in self.attacks:
+                group.draw(screen)
 
-    def GameOverScreen():
-        pass
+    def GameOverScreen(self, screen):
+        #GameOverText
+        text = ("%s Wins!") % (self.winner)
+        width0, height0 = self.gameOverFont.size(text)
+        texSurface = self.gameOverFont.render(text, True, (255,255,255))
+        screen.blit(texSurface, (self.width//2-width0//2, self.height//2-height0//2))
+        #Instruction Text
+        text = "Press r to restart Game"
+        width1, height1 = self.instructFont.size(text)
+        texSurface = self.instructFont.render(text, True, (255,255,255))
+        screen.blit(texSurface, (self.width//2-width1//2, self.height//2+height1+height0))
+
+
 
     def isKeyPressed(self, key):
         ''' return whether a specific key is being held '''
@@ -83,7 +110,6 @@ class PygameGame(object):
         self.fps = fps
         self.title = title
         self.bgColor = (255, 255, 255)
-        self.gameOver = False
         pygame.init()
 
     def run(self):
