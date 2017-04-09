@@ -3,14 +3,31 @@ import pygame, random
 # single-player AI for player
 def moveAIFighter(player, other):
     # return a string for a piece of movement
-    options = ['moveLeft', 'moveRight']*50
+    options = ['moveLeft', 'moveRight']
     aggroOptions = ['moveLeft', 'moveRight']
+    increasedLeft = ['moveLeft'] * 5
+    increasedRight = ['moveRight'] * 5
+    # the AI is more likely to go in the direction it is facing
+    if player.direction == 1:
+        options += increasedRight
+        aggroOptions += increasedRight
+    else:
+        options += increasedLeft
+        aggroOptions += increasedLeft
+    # increase likelihood of choosing other's direction
+    if distance(player.x, other.x+10, player.y, other.y) <\
+        distance(player.x, other.x, player.y, other.y):
+        # more likely to move left
+        options += increasedLeft
+        aggroOptions += increasedLeft
+    else: # more likely to move right
+        options += increasedRight
+        aggroOptions += increasedRight
+
     if player.canJump:
-        options += ['jump']
-        aggroOptions += ['jump']*2
+        aggroOptions += ['jump']
     if player.attackDelay <= 0:
-        options += ['attack']
-        aggroOptions += ['attack']*5 + ['']*10
+        aggroOptions += ['attack']*5
     aggroDist = 100
     # the options for aggression are weighted towards attacking
     if distance(player.x,other.x,player.y,other.y) < aggroDist:
