@@ -3,8 +3,14 @@ import pygame, random
 # single-player AI for player
 def moveAIFighter(player, other):
     # return a string for a piece of movement
-    options = ['moveLeft', 'moveRight', 'jump', 'attack']
-    aggroOptions = ['moveLeft', 'moveRight'] + ['jump']*2 + ['attack']*5
+    options = ['moveLeft', 'moveRight']*50
+    aggroOptions = ['moveLeft', 'moveRight']
+    if player.canJump:
+        options += ['jump']
+        aggroOptions += ['jump']*2
+    if player.attackDelay <= 0:
+        options += ['attack']
+        aggroOptions += ['attack']*5 + ['']*10
     aggroDist = 100
     # the options for aggression are weighted towards attacking
     if distance(player.x,other.x,player.y,other.y) < aggroDist:
