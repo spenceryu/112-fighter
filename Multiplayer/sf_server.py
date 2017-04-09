@@ -1,3 +1,6 @@
+# The socket programming in this project is based on Rohan Varma's
+# example of multiplayer socket programming.
+
 import socket
 from _thread import *
 from queue import Queue
