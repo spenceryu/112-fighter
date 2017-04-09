@@ -1,4 +1,4 @@
-import pygame
+import pygame, os
 from GameObject import GameObject
 from Attack import Attack
 import AI
@@ -14,8 +14,14 @@ class Fighter(GameObject):
         self.player = player
         self.attackDelay = random.randint(1, 1000)
         #Load and Scale Image
-        self.imageRight = pygame.transform.scale(pygame.image.load('Images/sprite.png').convert_alpha(), (50,50))
-        self.imageLeft = pygame.transform.flip(pygame.transform.scale(pygame.image.load('Images/sprite.png').convert_alpha(), (50,50)), True, False)
+        bigSprites = ['kosbie.png', 'rohan.png', 'andersen.png', 'rohan2.png']*100
+        otherSprites = os.listdir('Images/TAs_Teachers')[1:]
+        playerSprites = bigSprites + otherSprites
+        playerID = random.choice(playerSprites)
+        fileSprite = 'Images/TAs_Teachers/%s' % (playerID)
+
+        self.imageRight = pygame.transform.scale(pygame.image.load(fileSprite).convert_alpha(), (50,50))
+        self.imageLeft = pygame.transform.flip(pygame.transform.scale(pygame.image.load(fileSprite).convert_alpha(), (50,50)), True, False)
         self.image = self.imageRight
         self.faceInDir()
         #Call GameObject Init
