@@ -12,10 +12,11 @@ use this code in your term project if you want
     should use pygame.display.update(Rect) instead)
 '''
 import pygame
-from Fighter import Fighter
-from GameObject import GameObject
-from Attack import Attack
-from HealthBar import HealthBar
+from Fighter import *
+from GameObject import *
+from Attack import *
+from HealthBar import *
+from Background import *
 
 class PygameGame(object):
 
@@ -26,6 +27,7 @@ class PygameGame(object):
         self.attackGroup0 = pygame.sprite.Group()
         self.attackGroup1 = pygame.sprite.Group()
         self.attacks = [self.attackGroup0, self.attackGroup1]
+        self.Background = pygame.sprite.Group(Background())
 
     def mousePressed(self, x, y):
         pass
@@ -53,6 +55,7 @@ class PygameGame(object):
 
 
     def redrawAll(self, screen):
+        self.Background.draw(screen)
         self.fighterGroup.draw(screen)
         for HealthBar in self.HealthBars:
             HealthBar.drawHealth(screen)
